@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components/macro';
+import { useState } from 'react';
+import styled, { keyframes, ThemeProvider } from 'styled-components/macro';
 import GlobalStyle from './GlobalStyle';
 import logo from './logo.svg';
 
@@ -15,14 +16,14 @@ const Wrapper = styled.div`
   text-align: center;
 
   header {
-    background-color: #282c34;
+    background-color: ${(props) => props.theme.background};
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: ${(props) => props.theme.color};
   }
 
   header img {
@@ -41,11 +42,29 @@ const Link = styled.a`
   color: #61dafb;
 `;
 
+const white = {
+  background: 'white',
+  color: '#ff69b4',
+};
+
+const pink = {
+  background: '#ff69b4',
+  color: 'white',
+};
+
 function App() {
+  const [theme, setTheme] = useState(white);
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Wrapper>
+        <button
+          type="button"
+          onClick={() => setTheme(theme === pink ? white : pink)}
+        >
+          Change Colour
+        </button>
         <header>
           <img src={logo} alt="logo" />
           <p>
@@ -62,7 +81,7 @@ function App() {
           </Link>
         </header>
       </Wrapper>
-    </>
+    </ThemeProvider>
   );
 }
 
