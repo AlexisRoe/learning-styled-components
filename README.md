@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Learning styled Components
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a project from the 5 week of "Neue Fische" Bootcamp.
 
-## Available Scripts
+## Styled Components
 
-In the project directory, you can run:
+[Homepage: styled components](https://styled-components.com/)
 
-### `npm start`
+        import styled from 'styled-components/macro';
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+        const Button = styled.button`
+        /* Adapt the colors based on primary prop */
+        background: ${props => props.primary ? "palevioletred" : "white"};
+        color: ${props => props.primary ? "white" : "palevioletred"};
+        font-size: 1em;
+        margin: 1em;
+        padding: 0.25em 1em;
+        border: 2px solid palevioletred;
+        border-radius: 3px;
+        display: block;
+        `;
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+        const TomatoButton = styled(Button)`
+        color: tomato;
+        border-color: tomato;
+        `;
 
-### `npm test`
+        render(
+        <div>
+            <Button>Normal Button</Button>
+            <Button as="a" href="/">Link with Button styles</Button>
+            <TomatoButton as="a" href="/">Link with Tomato Button styles</TomatoButton>
+        </div>
+        );
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Themegenerator
 
-### `npm run build`
+[Documentation: Theming](https://styled-components.com/docs/advanced#theming)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    import styled, { keyframes, ThemeProvider } from 'styled-components/macro';
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    // Define our button, but with the use of props.theme this time
+    const Button = styled.button`
+    font-size: 1em;
+    margin: 1em;
+    padding: 0.25em 1em;
+    border-radius: 3px;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    /* Color the border and text with theme.main */
+    color: ${props => props.theme.main};
+    border: 2px solid ${props => props.theme.main};
+    `;
 
-### `npm run eject`
+    // We are passing a default theme for Buttons that arent wrapped in the ThemeProvider
+    Button.defaultProps = {
+    theme: {
+        main: "palevioletred"
+    }
+    }
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+    // Define what props.theme will look like
+    const theme = {
+    main: "mediumseagreen"
+    };
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    render(
+    <div>
+        <Button>Normal</Button>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+        <ThemeProvider theme={theme}>
+        <Button>Themed</Button>
+        </ThemeProvider>
+    </div>
+    );
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+also allowing easily switching it with useState
 
-## Learn More
+    function App() {
+    const [theme, setTheme] = useState(white);
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    return (
+        <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Wrapper>
+            <header>
+            <button
+                type="button"
+                onClick={() => setTheme(theme === pink ? white : pink)}
+            >
+                Change Colour
+            </button>
